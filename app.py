@@ -3,7 +3,7 @@ import google.generativeai as genai
 import os
 
 #set API key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyC1Wxsji3-4tc93uuQkcZAUnzjCe8bOVG4"
+os.environ["GOOGLE_API_KEY"] = " ENTER YOUR GOOGLE API KEY"
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 app = Flask(__name__)
@@ -110,4 +110,5 @@ def recommendations():
         return render_template('suggestion_page.html', recommendations=recommendations)
 #python main
 if __name__=="__main__":
+
     app.run(debug=True)
