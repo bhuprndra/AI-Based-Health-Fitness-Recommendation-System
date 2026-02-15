@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet & Workout Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+     <div class="header-container">
+        <header class="header-content">
+            <div class="domain">
+                <img alt="Workout & Diet Planner" src="{{ url_for('static', filename='image.png') }}" width="120em" height="100em">
+                <div class="logo">Health & fitness</div>
+            </div>
+        </header>
+    </div>
+
+    <!-- result section -->
+    <div class="output-container">
+        {% if recommendations %}
+        <h2>Suggestions</h2>
+        <form action="/">
+            <!-- action buttons -->
+            <div class="result-buttons">
+                <button type="button" class="recommendation" onclick="showModal('dietModal')">View Diet Types</button>
+                <button type="button" class="recommendation" onclick="showModal('workoutModal')">View Workout Options</button>
+                <button type="button" class="recommendation" onclick="showModal('breakfastModal')">View Breakfast Ideas</button>
+                <button type="button" class="recommendation" onclick="showModal('dinnerModal')">View Dinner Options</button>
+                <button type="button" class="recommendation" onclick="showModal('tipsModal')">View Additional Tips</button>
+                <button class="back" type="submit">Back</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- modal Diet -->
+    <div id="dietModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('dietModal')">&times;</span>
+            <h3>Diet Types</h3>
+            <ul>
+                {% for diet in recommendations.diet_types %}
+                    <li>{{ diet }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- modal Workout -->
+    <div id="workoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('workoutModal')">&times;</span>
+            <h3>Workout Options</h3>
+            <ul>
+                {% for workout in recommendations.workouts %}
+                    <li>{{ workout }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- modal Breakfast -->
+    <div id="breakfastModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('breakfastModal')">&times;</span>
+            <h3>Breakfast Ideas</h3>
+            <ul>
+                {% for breakfast in recommendations.breakfasts %}
+                    <li>{{ breakfast }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- modal Dinner -->
+    <div id="dinnerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('dinnerModal')">&times;</span>
+            <h3>Dinner Options</h3>
+            <ul>
+                {% for dinner in recommendations.dinners %}
+                    <li>{{ dinner }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- modal Tips -->
+
+    <div id="tipsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('tipsModal')">&times;</span>
+        <h3>Additional Tips</h3>
+
+        <h4>Useful Snacks</h4>
+        <ul>
+            {% for snack in recommendations.useful_snacks %}
+                <li>{{ snack }}</li>
+            {% endfor %}
+        </ul>
+
+        <h4>Supplements</h4>
+        <ul>
+            {% for supplement in recommendations.supplements %}
+                <li>{{ supplement }}</li>
+            {% endfor %}
+        </ul>
+
+        <h4>Hydration Tips</h4>
+        <ul>
+            {% for tip in recommendations.hydration %}
+                <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+
+    <script>
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+    window.onclick = function(event) {
+        const modals = document.getElementsByClassName("modal");
+        for (let i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = "none";
+            }
+        }
+    }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Diet and Workout Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+</head>
+<body>
+    <div class="header-container">
+        <header class="header-content">
+            <div class="domain">
+                <img  alt="Workout & Diet Planner" src="{{ url_for('static', filename='image.png') }}" width="120em" height="100em">
+
+                <div class="logo">Health & fitness</div>
+                <div class="empty"></div>
+
+            </div>
+        </header>
+    </div>
+    <div class="input-container">
+        <h2>Personalized Diet & Workout Planner</h2>
+        <form action="/recommendation" method="post">
+            <label class="required" for="diet">Dietary Preferences</label>
+            <input type="text" id="diet" name="dietary_preferences" placeholder="e.g vegetarian, high-protein" required>
+
+            <label class="required" for="fit">Fitness Goal</label>
+            <input type="text" id="fit" name="fitness_goal" placeholder="e.g wight loss, muscle gain" required>
+
+            <label class="required" for="restrict">Dietary Restrictions:</label>
+            <input type="text" id="restrict" name="dietary_restrictions" placeholder="e.g., gluten-free, lactose-intolerant" required>
+
+            <label class="required" for="health">Health Conditions:</label>
+            <input type="text" id="health" name="health_conditions" placeholder="e.g., diabetes, high blood pressure" required>
+
+            <label class="required" for="query">Your Query:</label>
+            <textarea name="user_query" id="query" placeholder="Describe your goal briefly" required></textarea>
+
+            <button class="recommendation" type="submit" >Get Suggestion</button>
+
+        </form>
+    </div>
+</body>
+</html>
