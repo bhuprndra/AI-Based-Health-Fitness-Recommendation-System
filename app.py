@@ -29,14 +29,19 @@ def generate_recommendation(
     Health Conditions: {health_conditions}
     User Query: {user_query}
 
-    IMPORTANT:
-    - Use very simple English.
-    - Write as if explaining to a beginner.
-    - Avoid medical, scientific, or technical terms.
-    - Keep each recommendation short and easy to understand.
-    - Use common food names and simple workout names.
-    - Make recommendations practical and affordable.
-    - Do not use difficult vocabulary.
+
+   IMPORTANT:
+    - Use simple and easy-to-understand English.
+    - Give complete recommendations, not just single foods.
+    - Explain briefly why it helps.
+    - Use practical and affordable foods.
+    - Include protein, carbohydrates, healthy fats, and vegetables where appropriate.
+    - Give balanced meal suggestions instead of naming only one fruit or vegetable.
+    - Suggest realistic workouts for beginners and intermediate users.
+    - Prefer Indian food options when suitable.
+    - Keep recommendations between 1 and 3 sentences.
+    - Avoid medical or scientific jargon.
+    - Make the plan personalized to the user's goal.
 
     Return EXACTLY in this format with no extra text before or after:
 
