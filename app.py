@@ -6,18 +6,13 @@ import os
 
 app = Flask(__name__)
 
-# ==========================
 # Gemini API Configuration
-# ==========================
 load_dotenv()
 # Store your API key in environment variable: GEMINI_API_KEY
 API_KEY = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=API_KEY)
 
-
-# ==========================
 # Recommendation Generator
-# ==========================
 def generate_recommendation(
     dietary_preferences,
     fitness_goal,
@@ -33,6 +28,15 @@ def generate_recommendation(
     Dietary Restrictions: {dietary_restrictions}
     Health Conditions: {health_conditions}
     User Query: {user_query}
+
+    IMPORTANT:
+    - Use very simple English.
+    - Write as if explaining to a beginner.
+    - Avoid medical, scientific, or technical terms.
+    - Keep each recommendation short and easy to understand.
+    - Use common food names and simple workout names.
+    - Make recommendations practical and affordable.
+    - Do not use difficult vocabulary.
 
     Return EXACTLY in this format with no extra text before or after:
 
@@ -141,17 +145,13 @@ def parse_recommendations(recommendations_text):
     return recommendations
 
 
-# ==========================
-# Home Page
-# ==========================
+# Load Home Page
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# ==========================
 # Recommendation Page (POST)
-# ==========================
 @app.route("/recommendation", methods=["POST"])
 def recommendations():
     dietary_preferences = request.form.get("dietary_preferences", "").strip()
