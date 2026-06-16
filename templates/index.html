@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitAI — Personalized Health Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ── Navbar ── -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='image.png') }}" alt="FitAI Logo" class="nav-logo">
+            <span class="nav-title">Health and Fitness Agent</span>
+        </div>
+        <div class="nav-links">
+            <a href="#form-section" class="btn-nav">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">AI-Powered Fitness Planning</span>
+            <h1 class="hero-title">Your Body.<br><span class="gradient-text">Your Plan.</span></h1>
+            <p class="hero-sub">Tell us your goals our AI makes a fully personalized diet &amp; workout plan.</p>
+        </div>
+    </section>
+
+    <!-- ── Form ── -->
+    <section class="form-section" id="form-section">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h2>Build Your Plan</h2>
+                <p>Fill in the details below — the more specific, the better your plan.</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">⚠ {{ error }}</div>
+            {% endif %}
+
+            <form action="{{ url_for('recommendations') }}" method="post" id="planForm" novalidate>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="diet">Dietary Preferences <span class="req">*</span></label>
+                        <input type="text" id="diet" name="dietary_preferences"
+                               placeholder="e.g. vegetarian, high-protein, keto" required>
+                        <span class="field-hint">What kind of diet do you follow?</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fit">Fitness Goal <span class="req">*</span></label>
+                        <input type="text" id="fit" name="fitness_goal"
+                               placeholder="e.g. weight loss, muscle gain, endurance" required>
+                        <span class="field-hint">What do you want to achieve?</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="restrict">Dietary Restrictions <span class="req">*</span></label>
+                        <input type="text" id="restrict" name="dietary_restrictions"
+                               placeholder="e.g. gluten-free, lactose-intolerant, nut allergy" required>
+                        <span class="field-hint">Any foods to avoid?</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="health">Health Conditions <span class="req">*</span></label>
+                        <input type="text" id="health" name="health_conditions"
+                               placeholder="e.g. diabetes, high blood pressure, none" required>
+                        <span class="field-hint">Any medical conditions we should know about?</span>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="query">Describe Your Goal <span class="req">*</span></label>
+                    <textarea id="query" name="user_query" rows="3"
+                              placeholder="e.g. I'm a 28-year-old trying to lose 10 kg in 3 months while maintaining energy for a desk job." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span class="btn-text">Generate My Plan</span>
+                    <span class="btn-loader" style="display:none">
+                        <span class="spinner"></span> Analysing...
+                    </span>
+                </button>
+
+            </form>
+        </div>
+    </section>
+
+    <!-- ── Loading Overlay ── -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-box">
+            <div class="pulse-ring"></div>
+            <img src="{{ url_for('static', filename='image.png') }}" alt="" class="loading-logo">
+            <h3>Crafting Your Plan</h3>
+            <p>Our AI is building your personalised fitness roadmap…</p>
+            <div class="loading-steps">
+                <div class="step active" id="step1">Analysing your profile</div>
+                <div class="step" id="step2">Selecting diet recommendations</div>
+                <div class="step" id="step3">Building workout plan</div>
+                <div class="step" id="step4">Finalising your plan</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <p>Built with <span style="color:#4ade80">♥</span> using Flask &amp; Gemini AI </p>
+        <p> Health and Fitness Agent</p>
+        <p>
+        Contact Us:
+        <a href="Email:bhupendrarai1718@gmail.com"> 📧 bhupendrarai1718@gmail.com</a> |
+        <a href="Tel:+9752376803"> 📞 +91 9752376803</a> |
+        <a href="https://www.linkedin.com/in/bhupendra-rai/"> 🔗 Bhupendra_rai</a>
+        </p>
+    </footer>
+
+    <script>
+        // Form loading animation
+        const form = document.getElementById('planForm');
+        const overlay = document.getElementById('loadingOverlay');
+        const btnText = document.querySelector('.btn-text');
+        const btnLoader = document.querySelector('.btn-loader');
+        const steps = ['step1','step2','step3','step4'];
+        let stepIndex = 0;
+
+        form.addEventListener('submit', function(e) {
+            // Client-side validation
+            const inputs = form.querySelectorAll('[required]');
+            let valid = true;
+            inputs.forEach(el => {
+                if (!el.value.trim()) {
+                    el.classList.add('invalid');
+                    valid = false;
+                } else {
+                    el.classList.remove('invalid');
+                }
+            });
+            if (!valid) { e.preventDefault(); return; }
+
+            // Show loader
+            overlay.style.display = 'flex';
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline-flex';
+
+            // Animate steps
+            const interval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    document.getElementById(steps[stepIndex]).classList.add('active');
+                    stepIndex++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1500);
+        });
+
+        // Remove invalid class on input
+        document.querySelectorAll('[required]').forEach(el => {
+            el.addEventListener('input', () => el.classList.remove('invalid'));
+        });
+    </script>
+</body>
+</html>

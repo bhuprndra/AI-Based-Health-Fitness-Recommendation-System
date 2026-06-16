@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Plan — FitAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ── Navbar ── -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='image.png') }}" alt="FitAI Logo" class="nav-logo">
+            <span class="nav-title">Health and Fitness Agent</span>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}" class="btn-nav">← New Plan</a>
+        </div>
+    </nav>
+
+    <!-- ── Results Hero ── -->
+    <section class="results-hero">
+        <div class="results-hero-content">
+            <span class="hero-badge">✦ Plan Ready</span>
+            <h1>Your Personalised<br><span class="gradient-text">Fitness Plan</span></h1>
+            {% if fitness_goal %}
+            <p class="hero-sub">Optimised for: <strong>{{ fitness_goal }}</strong>
+            {% if dietary_preferences %} · {{ dietary_preferences }}{% endif %}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ── Cards Grid ── -->
+    <section class="cards-section">
+        <div class="cards-grid">
+
+            <!-- Diet -->
+            <div class="plan-card" onclick="openDrawer('dietDrawer')">
+                <h3>Diet Plans</h3>
+                <p>{{ recommendations.diet_types | length }} recommendations</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Workout -->
+            <div class="plan-card" onclick="openDrawer('workoutDrawer')">
+                <h3>Workout Routines</h3>
+                <p>{{ recommendations.workouts | length }} exercises</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Breakfast -->
+            <div class="plan-card" onclick="openDrawer('breakfastDrawer')">
+                <h3>Breakfast Ideas</h3>
+                <p>{{ recommendations.breakfasts | length }} meal ideas</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Dinner -->
+            <div class="plan-card" onclick="openDrawer('dinnerDrawer')">
+                <h3>Dinner Options</h3>
+                <p>{{ recommendations.dinners | length }} meal options</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Snacks -->
+            <div class="plan-card" onclick="openDrawer('snacksDrawer')">
+                <h3>Healthy Snacks</h3>
+                <p>{{ recommendations.useful_snacks | length }} snack ideas</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Supplements -->
+            <div class="plan-card" onclick="openDrawer('supplementsDrawer')">
+                <h3>Supplements</h3>
+                <p>{{ recommendations.supplements | length }} suggestions</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <!-- Hydration -->
+            <div class="plan-card plan-card-wide" onclick="openDrawer('hydrationDrawer')">
+                <h3>Hydration Tips</h3>
+                <p>{{ recommendations.hydration | length }} daily tips</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+        </div>
+
+        <div class="back-row">
+            <a href="{{ url_for('index') }}" class="btn-back">← Generate a New Plan</a>
+        </div>
+    </section>
+
+    <!-- ── Drawers ── -->
+
+    <!-- Diet Drawer -->
+    <div class="drawer-overlay" id="dietDrawer" onclick="closeDrawer(event, 'dietDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'dietDrawer')">✕</button>
+            <h2>Diet Recommendations</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.diet_types %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No recommendations generated. Try being more specific.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Workout Drawer -->
+    <div class="drawer-overlay" id="workoutDrawer" onclick="closeDrawer(event, 'workoutDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'workoutDrawer')">✕</button>
+            <h2>Workout Routines</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.workouts %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No workout options generated.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Breakfast Drawer -->
+    <div class="drawer-overlay" id="breakfastDrawer" onclick="closeDrawer(event, 'breakfastDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'breakfastDrawer')">✕</button>
+
+            <h2>Breakfast Ideas</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.breakfasts %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No breakfast ideas generated.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dinner Drawer -->
+    <div class="drawer-overlay" id="dinnerDrawer" onclick="closeDrawer(event, 'dinnerDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'dinnerDrawer')">✕</button>
+            <h2>Dinner Options</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.dinners %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No dinner options generated.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Snacks Drawer -->
+    <div class="drawer-overlay" id="snacksDrawer" onclick="closeDrawer(event, 'snacksDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'snacksDrawer')">✕</button>
+            <h2>Healthy Snacks</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.useful_snacks %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No snack ideas generated.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Supplements Drawer -->
+    <div class="drawer-overlay" id="supplementsDrawer" onclick="closeDrawer(event, 'supplementsDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'supplementsDrawer')">✕</button>
+            <h2>Supplements</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.supplements %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No supplement suggestions generated.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Hydration Drawer -->
+    <div class="drawer-overlay" id="hydrationDrawer" onclick="closeDrawer(event, 'hydrationDrawer')">
+        <div class="drawer">
+            <button class="drawer-close" onclick="closeDrawer(null, 'hydrationDrawer')">✕</button>
+            <h2>Hydration Tips</h2>
+            <ul class="plan-list">
+                {% for item in recommendations.hydration %}
+                <li><span class="bullet">{{ loop.index }}</span>{{ item }}</li>
+                {% else %}
+                <li class="empty-state">No hydration tips generated.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <p>Built with <span style="color:#4ade80">♥</span> using Flask &amp; Gemini AI &nbsp;·&nbsp; FitAI © 2025</p>
+    </footer>
+
+    <script>
+        function openDrawer(id) {
+            const el = document.getElementById(id);
+            el.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer(event, id) {
+            if (event && event.target !== document.getElementById(id)) return;
+            document.getElementById(id).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Escape key closes drawers
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.drawer-overlay.open').forEach(el => {
+                    el.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            }
+        });
+
+        // Stagger card entrance
+        document.querySelectorAll('.plan-card').forEach((card, i) => {
+            card.style.animationDelay = `${i * 0.08}s`;
+        });
+    </script>
+</body>
+</html>
